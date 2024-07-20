@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "672000942068",
+    "firebase_url": "https://cyptarapoto-default-rtdb.firebaseio.com",
+    "project_id": "cyptarapoto",
+    "storage_bucket": "cyptarapoto.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:672000942068:android:d7d4f5a86475ab5adc63a1",
+        "android_client_info": {
+          "package_name": "com.example.cyptarapoto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCh98al4xRwOu2XVGHwV3j5J9x4VjFwzA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
