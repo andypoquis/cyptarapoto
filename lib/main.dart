@@ -1,4 +1,5 @@
 import 'package:cyptarapoto/app/bindings/auth_binding.dart';
+import 'package:cyptarapoto/app/bindings/home_binding.dart';
 import 'package:cyptarapoto/app/routes/pages_app.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +11,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await GetStorage.init('GlobalStorage');
+  GetStorage box = GetStorage('GlobalStorage');
+
+  bool isloged = box.read("isloged") ?? false;
+  print('isloged: $isloged');
 
   runApp(GetMaterialApp(
     debugShowCheckedModeBanner: false,
-    initialRoute: Routes.AUTH,
+    // ignore: unnecessary_null_comparison
+    initialRoute: !isloged ? Routes.AUTH : Routes.HOME,
     theme: ThemeData(
-      backgroundColor: Colors.white,
+      iconTheme: IconThemeData(color: Colors.white),
       primaryColor: const Color(0xffE84E4E), // Color principal
       focusColor: const Color(0xffE84E4E),
       textSelectionTheme: const TextSelectionThemeData(
@@ -49,7 +55,7 @@ void main() async {
         ),
       ),
     ),
-    initialBinding: AuthBinding(),
+    initialBinding: !isloged ? AuthBinding() : HomeBinding(),
     defaultTransition: Transition.fade,
     getPages: AppPages.pages,
   ));

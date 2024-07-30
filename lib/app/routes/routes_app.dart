@@ -8,4 +8,5 @@ abstract class Routes {
   static const SIDEBAR = '/sidebar';
   static const NEWCOLLEGIATES = '/new-collegiates';
   static const NEWEVENTPAGE = '/new-event';
+  static const PROFILE = '/profile';
 }

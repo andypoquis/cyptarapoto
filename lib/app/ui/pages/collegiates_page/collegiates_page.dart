@@ -1,3 +1,4 @@
+import 'package:cyptarapoto/app/ui/pages/collegiates_page/newcollegiates_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,6 +24,15 @@ class CollegiatesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Colegiados'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              controller.clearControllers();
+              Get.to(() => NewCollegiatesPage(), arguments: {'isEdit': false});
+            },
+          )
+        ],
       ),
       body: SafeArea(
         child: Obx(() {
@@ -41,31 +51,38 @@ class CollegiatesPage extends StatelessWidget {
                 }
               }
               final collegiate = controller.collegiates[index];
-              return Container(
-                margin: EdgeInsets.all(10),
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildInfoRow('Member', collegiate.member),
-                    _buildInfoRow('Email', collegiate.email),
-                    _buildInfoRow('Phone', collegiate.phone.toString()),
-                    _buildInfoRow('ID', collegiate.id.toString()),
-                    _buildInfoRow(
-                        'Status', collegiate.status ? 'Active' : 'Inactive'),
-                  ],
+              return GestureDetector(
+                onTap: () {
+                  controller.loadCollegiateData(collegiate, collegiate.docId);
+                  Get.to(() => NewCollegiatesPage(),
+                      arguments: {'isEdit': true});
+                },
+                child: Container(
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildInfoRow('Member', collegiate.member),
+                      _buildInfoRow('Email', collegiate.email),
+                      _buildInfoRow('Phone', collegiate.phone.toString()),
+                      _buildInfoRow('ID', collegiate.id.toString()),
+                      _buildInfoRow(
+                          'Status', collegiate.status ? 'Active' : 'Inactive'),
+                    ],
+                  ),
                 ),
               );
             },

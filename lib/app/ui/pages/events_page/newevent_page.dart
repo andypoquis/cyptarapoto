@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:cyptarapoto/app/controllers/events_controller.dart';
 import 'package:cyptarapoto/app/shared/constants.dart';
+import 'package:cyptarapoto/app/ui/pages/events_page/widgets/calendar_selector.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quill_html_editor/quill_html_editor.dart';
@@ -9,14 +13,29 @@ class NewEventPage extends GetView<EventsController> {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic>? arguments =
+        Get.arguments as Map<String, dynamic>?;
+    final bool isEdit = arguments?['isEdit'] ?? false;
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.white,
         title: Text(
-          'Nuevo Evento',
+          isEdit ? 'Editar Evento' : 'Nuevo Evento',
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          isEdit
+              ? IconButton(
+                  onPressed: () => controller.deleteEvent(),
+                  icon: const Icon(Icons.delete))
+              : Container()
+        ],
         backgroundColor: primaryColor,
         elevation: 1,
+        iconTheme: IconThemeData(
+          color: Colors
+              .white, // Cambia el color de la flecha de retroceso a blanco
+        ),
       ),
       body: SafeArea(
         child: Container(
@@ -43,12 +62,8 @@ class NewEventPage extends GetView<EventsController> {
                 ),
                 _buildTextFieldHtml(
                     controller.htmlInputController, 'Descripción del evento'),
-                _buildTitle('Fecha de Inicio'),
-                _buildTextField(controller.startDateController,
-                    '14 de junio de 2024, 12:00:00 a.m. UTC-5'),
-                _buildTitle('Fecha de Fin'),
-                _buildTextField(controller.endDateController,
-                    '14 de junio de 2024, 12:00:00 a.m. UTC-5'),
+                _buildTitle('Fecha de Evento'),
+                const CalendarSelector(),
                 _buildTitle('Ubicación'),
                 _buildTextField(
                     controller.locationController, 'Ubicación del evento'),
@@ -56,18 +71,21 @@ class NewEventPage extends GetView<EventsController> {
                 _buildTextField(
                     controller.organizeController, 'Organizador del evento'),
                 _buildTitle('Imagen'),
-                _buildTextField(
-                    controller.imageController, 'URL de la imagen del evento'),
+                _buildImagePicker(context),
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      controller.addEvent();
+                      if (isEdit) {
+                        controller.editEvent();
+                      } else {
+                        controller.addEvent();
+                      }
                       Get.back();
                     }
                   },
                   child: Text(
-                    'Agregar Evento',
+                    isEdit ? 'Editar Evento' : 'Agregar Evento',
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -142,8 +160,8 @@ class NewEventPage extends GetView<EventsController> {
         shadowColor: Colors.grey.withOpacity(0.5),
         borderRadius: BorderRadius.circular(6),
         child: QuillHtmlEditor(
-          text: "<h1>Hello</h1>This is a quill html editor example 😊",
-          hintText: 'Hint text goes here',
+          text: "<h1>Evento</h1>Redactar Evento",
+          hintText: 'Ingresar evento',
           controller: controller,
           isEnabled: true,
           minHeight: 300,
@@ -166,5 +184,54 @@ class NewEventPage extends GetView<EventsController> {
         ),
       ),
     );
+  }
+
+  Widget _buildImagePicker(BuildContext context) {
+    return Obx(() {
+      return GestureDetector(
+        onTap: () async {
+          FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+          if (result != null) {
+            controller.imageFile.value = File(result.files.single.path!);
+            controller.imageName.value = result.files.single.name;
+            print("Imagen seleccionada: ${result.files.single.name}");
+          } else {
+            // El usuario canceló el selector de archivos
+          }
+        },
+        child: Container(
+          height: 150,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.grey),
+            color: Colors.grey[200],
+          ),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.upload_file, size: 40, color: Colors.grey[700]),
+                SizedBox(height: 8),
+                Text(
+                  'Arrastra tus archivos aquí para subirlos',
+                  style: TextStyle(color: Colors.grey[700]),
+                ),
+                if (controller.imageName.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      'Imagen seleccionada: ${controller.imageName.value}',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 }

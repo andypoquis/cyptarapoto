@@ -1,13 +1,12 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:cyptarapoto/app/routes/pages_app.dart';
-import 'package:cyptarapoto/app/shared/constants.dart';
 import 'package:cyptarapoto/app/ui/pages/collegiates_page/collegiates_page.dart';
 import 'package:cyptarapoto/app/ui/pages/events_page/events_page.dart';
-import 'package:cyptarapoto/app/ui/pages/home_page/home_page.dart';
 import 'package:cyptarapoto/app/widgets/custom_app_bar_widget.dart';
 import 'package:cyptarapoto/app/widgets/search_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../controllers/bottomnavbar_controller.dart';
 
 class BottomnavbarPage extends GetView<BottomnavbarController> {
@@ -17,24 +16,27 @@ class BottomnavbarPage extends GetView<BottomnavbarController> {
       child: Scaffold(
         appBar: CustomAppBar(
             searchWidget: SearchWidget(),
-            trailing: Obx(() {
-              if (controller.avatarUrl.value.isEmpty) {
-                return CircleAvatar(
-                  child: Text(
-                    'A',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  backgroundColor: Colors.lightGreen,
-                );
-              } else {
-                return CircleAvatar(
-                  child: Text(
-                    'A',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                );
-              }
-            })),
+            trailing: GestureDetector(
+              onTap: () => controller.navigationProfilePage(),
+              child: Obx(() {
+                if (controller.avatarUrl.value.isEmpty) {
+                  return const CircleAvatar(
+                    child: Text(
+                      'P',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    backgroundColor: Colors.lightGreen,
+                  );
+                } else {
+                  return const CircleAvatar(
+                    child: Text(
+                      'A',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  );
+                }
+              }),
+            )),
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: Theme.of(context).primaryColor,
           isExtended: true,

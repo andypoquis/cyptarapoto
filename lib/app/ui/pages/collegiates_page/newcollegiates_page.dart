@@ -8,10 +8,14 @@ class NewCollegiatesPage extends GetView<CollegiatesController> {
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic>? arguments =
+        Get.arguments as Map<String, dynamic>?;
+    final bool isEdit = arguments?['isEdit'] ?? false;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Nuevo Colegiado',
+          isEdit ? 'Editar Colegiado' : 'Nuevo Colegiado',
           style: TextStyle(color: Colors.white),
         ),
         backgroundColor: primaryColor,
@@ -52,12 +56,16 @@ class NewCollegiatesPage extends GetView<CollegiatesController> {
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      controller.addCollegiate();
+                      if (isEdit) {
+                        controller.editCollegiate();
+                      } else {
+                        controller.addCollegiate();
+                      }
                       Get.back();
                     }
                   },
                   child: Text(
-                    'Agregar Colegiado',
+                    isEdit ? 'Editar Colegiado' : 'Agregar Colegiado',
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -112,6 +120,9 @@ class NewCollegiatesPage extends GetView<CollegiatesController> {
             contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           ),
           validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Este campo es obligatorio';
+            }
             return null;
           },
         ),

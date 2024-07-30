@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../models/event_model.dart';
 
@@ -25,11 +27,27 @@ class EventProvider {
     });
   }
 
-  Future<void> addEvent(Event event) async {
+  Future<DocumentReference> addEvent(Event event) async {
     try {
-      await _firestore.collection('events').add(event.toMap());
+      return await _firestore.collection('events').add(event.toMap());
     } catch (e) {
       print('Error adding event: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateEvent(String docId, Event event) async {
+    print('docid $docId');
+    await _firestore.collection('events').doc(docId).update(event.toMap());
+  }
+
+  Future<void> deleteEvent(String docId) async {
+    try {
+      await _firestore.collection('events').doc(docId).delete();
+      Get.snackbar('Completo', 'Se elimino evento',
+          backgroundColor: Colors.greenAccent);
+    } catch (e) {
+      Get.snackbar('Error', '$e');
       rethrow;
     }
   }

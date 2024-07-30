@@ -25,12 +25,12 @@ android {
     ndkVersion '21.3.6528147'
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -57,5 +57,9 @@ flutter {
 }
 
 dependencies {
-    // Tus dependencias aquí
+    // Usar el BOM de Firebase para mantener versiones consistentes
+    implementation platform('com.google.firebase:firebase-bom:32.1.0')
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

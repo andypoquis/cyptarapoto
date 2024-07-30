@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cyptarapoto/app/routes/pages_app.dart';
 import 'package:cyptarapoto/app/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
@@ -12,7 +13,7 @@ import '../data/models/event_model.dart';
 import '../data/provider/eventprovider.dart';
 
 class HomeController extends GetxController {
-  GetStorage box = GetStorage();
+  GetStorage box = GetStorage('GlobalStorage');
   var collegiate = Collegiate(
     address: '',
     birthdate: '',
@@ -23,6 +24,7 @@ class HomeController extends GetxController {
     member: '',
     phone: 0,
     status: false,
+    docId: '',
   ).obs;
 
   final events = <Event>[].obs;
@@ -34,21 +36,24 @@ class HomeController extends GetxController {
 
   @override
   Future<void> onInit() async {
-    super.onInit();
-    print('onInit');
     await FlutterStatusbarcolor.setStatusBarColor(Colors.white);
     await FlutterStatusbarcolor.setNavigationBarColor(secondaryColor);
     FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
 
     loadCollegiateData();
     fetchEvents();
+    print('onInit');
+
+    super.onInit();
   }
 
   void loadCollegiateData() {
     final storedCollegiate = box.read('collegiate');
+    print(storedCollegiate.toString());
     if (storedCollegiate != null) {
-      collegiate.value =
-          Collegiate.fromMap(Map<String, dynamic>.from(storedCollegiate));
+      final docId = storedCollegiate['docId'] as String; // Extrae el docId
+      collegiate.value = Collegiate.fromMap(
+          Map<String, dynamic>.from(storedCollegiate), docId);
     }
   }
 
@@ -93,5 +98,9 @@ class HomeController extends GetxController {
     if (!await launchUrl(uri)) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  void navigationToProfile() {
+    Get.toNamed(Routes.PROFILE);
   }
 }

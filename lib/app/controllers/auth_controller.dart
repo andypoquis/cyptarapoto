@@ -7,7 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import '../data/models/collegiate _model.dart';
 
 class AuthController extends GetxController {
-  GetStorage box = GetStorage();
+  GetStorage box = GetStorage('GlobalStorage');
 
   RxBool obscureText = true.obs;
   final FocusNode emailFocusNode = FocusNode();
@@ -44,9 +44,11 @@ class AuthController extends GetxController {
 
         if (querySnapshot.docs.isNotEmpty) {
           final docData = querySnapshot.docs.first.data();
-          final collegiate = Collegiate.fromMap(docData);
+          final docId = querySnapshot.docs.first.id;
+          final collegiate = Collegiate.fromMap(docData, docId);
           box.write('collegiate', collegiate.toMap());
-          Get.offAllNamed(Routes.SIDEBAR);
+          Get.offAllNamed(Routes.HOME);
+          box.write("isloged", true);
         } else {
           Get.snackbar('Error', 'Credenciales incorrectas.');
         }
@@ -59,9 +61,11 @@ class AuthController extends GetxController {
 
         if (querySnapshot.docs.isNotEmpty) {
           final docData = querySnapshot.docs.first.data();
-          final collegiate = Collegiate.fromMap(docData);
+          final docId = querySnapshot.docs.first.id;
+          final collegiate = Collegiate.fromMap(docData, docId);
           box.write('collegiate', collegiate.toMap());
           navigationToSideBarPage();
+          box.write("isloged", true);
         } else {
           Get.snackbar('Error', 'Credenciales incorrectas.');
         }

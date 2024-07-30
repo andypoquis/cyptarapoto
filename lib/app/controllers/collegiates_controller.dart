@@ -24,6 +24,8 @@ class CollegiatesController extends GetxController {
   final phoneController = TextEditingController();
   final statusController = false.obs;
 
+  String? currentDocId; // Variable para almacenar el ID del documento actual
+
   @override
   void onInit() {
     super.onInit();
@@ -67,9 +69,56 @@ class CollegiatesController extends GetxController {
       member: memberController.text,
       phone: int.parse(phoneController.text),
       status: statusController.value,
+      docId: '',
     );
 
     await _provider.addCollegiate(newCollegiate);
-    fetchCollegiates(); // Fetch the list again to include the new collegiate
+  }
+
+  Future<void> editCollegiate() async {
+    if (currentDocId == null) return;
+
+    Collegiate updatedCollegiate = Collegiate(
+      address: addressController.text,
+      birthdate: birthdateController.text,
+      code: codeController.text,
+      email: emailController.text,
+      gender: genderController.text,
+      id: int.parse(idController.text),
+      member: memberController.text,
+      phone: int.parse(phoneController.text),
+      status: statusController.value,
+      docId: '',
+    );
+
+    await _provider.updateCollegiate(currentDocId!, updatedCollegiate);
+  }
+
+  void loadCollegiateData(Collegiate collegiate, String docId) {
+    addressController.text = collegiate.address;
+    birthdateController.text = collegiate.birthdate;
+    codeController.text = collegiate.code;
+    emailController.text = collegiate.email;
+    genderController.text = collegiate.gender;
+    idController.text = collegiate.id.toString();
+    memberController.text = collegiate.member;
+    phoneController.text = collegiate.phone.toString();
+    statusController.value = collegiate.status;
+
+    currentDocId = docId; // Guardar el ID del documento
+  }
+
+  void clearControllers() {
+    addressController.clear();
+    birthdateController.clear();
+    codeController.clear();
+    emailController.clear();
+    genderController.clear();
+    idController.clear();
+    memberController.clear();
+    phoneController.clear();
+    statusController.value = false;
+
+    currentDocId = null; // Limpiar el ID del documento
   }
 }

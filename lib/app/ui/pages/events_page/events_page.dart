@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cyptarapoto/app/controllers/events_controller.dart';
 import 'package:cyptarapoto/app/data/models/event_model.dart';
 import 'package:cyptarapoto/app/shared/constants.dart';
+import 'package:cyptarapoto/app/ui/pages/events_page/newevent_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +24,12 @@ class EventsPage extends GetView<EventsController> {
             itemCount: controller.events.length,
             itemBuilder: (context, index) {
               final event = controller.events[index];
-              return EventCard(event: event);
+              return GestureDetector(
+                  onTap: () {
+                    controller.loadEventData(event, event.id);
+                    Get.to(() => NewEventPage(), arguments: {'isEdit': true});
+                  },
+                  child: EventCard(event: event));
             },
           );
         }),

@@ -22,12 +22,19 @@ class CYPProvider {
         hasMore = false;
       }
       return snapshot.docs.map((doc) {
-        return Collegiate.fromMap(doc.data() as Map<String, dynamic>);
+        return Collegiate.fromMap(doc.data() as Map<String, dynamic>, doc.id);
       }).toList();
     });
   }
 
   Future<void> addCollegiate(Collegiate collegiate) async {
     await _firestore.collection('collegiates').add(collegiate.toMap());
+  }
+
+  Future<void> updateCollegiate(String docId, Collegiate collegiate) async {
+    await _firestore
+        .collection('collegiates')
+        .doc(docId)
+        .update(collegiate.toMap());
   }
 }

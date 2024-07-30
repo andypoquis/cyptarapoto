@@ -8,6 +8,7 @@ class Collegiate {
   final String member;
   final int phone;
   final bool status;
+  final String docId;
 
   Collegiate({
     required this.address,
@@ -19,19 +20,21 @@ class Collegiate {
     required this.member,
     required this.phone,
     required this.status,
+    required this.docId,
   });
 
-  factory Collegiate.fromMap(Map<String, dynamic> data) {
+  factory Collegiate.fromMap(Map<String, dynamic> data, String docId) {
     return Collegiate(
       address: data['Address'] ?? '',
       birthdate: data['Birthdate'] ?? '',
       code: data['Code'] ?? '',
       email: data['Email'] ?? '',
       gender: data['Gender'] ?? '',
-      id: data['ID'] ?? '',
+      id: data['ID'] ?? 0,
       member: data['Member'] ?? '',
-      phone: data['Phone'] ?? '',
+      phone: data['Phone'] ?? 0,
       status: data['Status'] ?? false,
+      docId: docId,
     );
   }
 
@@ -45,7 +48,8 @@ class Collegiate {
       'ID': id,
       'Member': member,
       'Phone': phone,
-      'status': status,
+      'Status': status,
+      'docId': docId
     };
   }
 }

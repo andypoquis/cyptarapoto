@@ -1,3 +1,4 @@
+import 'package:cyptarapoto/app/routes/pages_app.dart';
 import 'package:cyptarapoto/app/shared/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbarcolor_ns/flutter_statusbarcolor_ns.dart';
@@ -25,5 +26,9 @@ class BottomnavbarController extends GetxController {
     await FlutterStatusbarcolor.setNavigationBarColor(secondaryColor);
     FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     super.onInit();
+  }
+
+  navigationProfilePage() {
+    Get.toNamed(Routes.PROFILE);
   }
 }
